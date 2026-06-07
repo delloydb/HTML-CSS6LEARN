@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>YouTube - Home</title>
+  <!-- Font Awesome for icons to match real YouTube style -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', 'Arial', sans-serif;
+      background-color: #0f0f0f;
+      color: #f1f1f1;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── TOP TASKBAR / HEADER ── */
+    .taskbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #0f0f0f;
+      height: 56px;
+      padding: 0 16px;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      border-bottom: 1px solid #272727;
+    }
+
+    .left-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .menu-icon {
+      font-size: 20px;
+      cursor: pointer;
+      color: #fff;
+      padding: 8px;
+      border-radius: 50%;
+      transition: background 0.2s;
+    }
+    .menu-icon:hover {
+      background-color: #272727;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      cursor: pointer;
+    }
+    .logo i {
+      font-size: 28px;
+      color: #ff0000;
+    }
+    .logo span {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #fff;
+    }
+
+    /* Search bar */
+    .search-area {
+      display: flex;
+      align-items: center;
+      flex: 0 1 640px;
+      min-width: 200px;
+      margin: 0 20px;
+    }
+    .search-box {
+      display: flex;
+      width: 100%;
+      height: 40px;
+    }
+    .search-box input {
+      flex: 1;
+      background-color: #121212;
+      border: 1px solid #303030;
+      border-right: none;
+      border-radius: 40px 0 0 40px;
+      padding: 0 16px;
+      font-size: 16px;
+      color: #fff;
+      outline: none;
+    }
+    .search-box input::placeholder {
+      color: #888;
+    }
+    .search-btn {
+      background-color: #222;
+      border: 1px solid #303030;
+      border-left: none;
+      border-radius: 0 40px 40px 0;
+      width: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #fff;
+      font-size: 18px;
+    }
+    .mic-btn {
+      background-color: #272727;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      margin-left: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #fff;
+      font-size: 18px;
+    }
+
+    .right-icons {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+    }
+    .right-icons i {
+      font-size: 20px;
+      padding: 8px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .right-icons i:hover {
+      background-color: #272727;
+    }
+    .profile {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: #f44336;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-left: 4px;
+      cursor: pointer;
+    }
+
+    /* ── MAIN LAYOUT (Sidebar + Content) ── */
+    .main-container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ── SIDE PANEL ── */
+    .sidebar {
+      width: 220px;
+      background-color: #0f0f0f;
+      padding: 12px 0;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid #272727;
+      flex-shrink: 0;
+      height: calc(100vh - 56px);
+    }
+    .sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .sidebar::-webkit-scrollbar-thumb {
+      background: #555;
+      border-radius: 3px;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 10px 24px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.2s;
+      color: #f1f1f1;
+      border-radius: 0 20px 20px 0;
+      margin-right: 8px;
+    }
+    .sidebar-item i {
+      width: 24px;
+      font-size: 18px;
+      text-align: center;
+    }
+    .sidebar-item:hover {
+      background-color: #272727;
+    }
+    .sidebar-item.active {
+      background-color: #272727;
+      font-weight: 500;
+    }
+    .sidebar-item.active i {
+      color: #fff;
+    }
+
+    .divider {
+      border-top: 1px solid #303030;
+      margin: 12px 0;
+    }
+
+    .sidebar-subtitle {
+      padding: 8px 24px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #aaaaaa;
+      letter-spacing: 0.5px;
+    }
+
+    .small-sidebar-item {
+      padding: 8px 24px;
+      font-size: 14px;
+      color: #aaa;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .small-sidebar-item:hover {
+      background-color: #272727;
+      color: #fff;
+    }
+
+    /* ── CONTENT AREA ── */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 28px;
+      background-color: #0f0f0f;
+    }
+    .content::-webkit-scrollbar {
+      width: 8px;
+    }
+    .content::-webkit-scrollbar-thumb {
+      background: #555;
+      border-radius: 4px;
+    }
+
+    /* Category pills */
+    .categories {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .category-pill {
+      background-color: #272727;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .category-pill.active {
+      background-color: #f1f1f1;
+      color: #0f0f0f;
+      font-weight: 500;
+    }
+    .category-pill:hover:not(.active) {
+      background-color: #3d3d3d;
+    }
+
+    /* Video grid */
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 28px 16px;
+    }
+
+    .video-card {
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+    .video-card:hover {
+      transform: scale(1.01);
+    }
+
+    .thumbnail {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background-color: #1e1e1e;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .duration {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      background-color: rgba(0,0,0,0.8);
+      color: #fff;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    .video-info {
+      display: flex;
+      gap: 12px;
+      padding-right: 8px;
+    }
+    .channel-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-color: #f44336;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+    }
+    .video-details {
+      flex: 1;
+    }
+    .video-title {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.4;
+      margin-bottom: 4px;
+      color: #f1f1f1;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .channel-name {
+      font-size: 13px;
+      color: #aaa;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .channel-name i {
+      font-size: 12px;
+      color: #aaa;
+    }
+    .video-stats {
+      font-size: 13px;
+      color: #aaa;
+    }
+
+    /* Responsive: hide some sidebar text on small screens if needed (still functional) */
+    @media (max-width: 850px) {
+      .sidebar {
+        width: 72px;
+      }
+      .sidebar-item span,
+      .sidebar-subtitle,
+      .small-sidebar-item {
+        display: none;
+      }
+      .sidebar-item {
+        justify-content: center;
+        padding: 12px;
+        gap: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Taskbar / Header -->
+  <header class="taskbar">
+    <div class="left-section">
+      <i class="fas fa-bars menu-icon" id="menuToggle" title="Menu"></i>
+      <div class="logo">
+        <i class="fab fa-youtube"></i>
+        <span>YouTube</span>
+      </div>
+    </div>
+
+    <div class="search-area">
+      <div class="search-box">
+        <input type="text" placeholder="Search" class="search-bar" id="searchInput">
+        <button class="search-btn" id="searchButton"><i class="fas fa-search"></i></button>
+      </div>
+      <button class="mic-btn"><i class="fas fa-microphone"></i></button>
+    </div>
+
+    <div class="right-icons">
+      <i class="fas fa-video" title="Create"></i>
+      <i class="far fa-bell" title="Notifications"></i>
+      <div class="profile" title="Your channel">M</div>
+    </div>
+  </header>
+
+  <!-- Main layout: Sidebar + Video content -->
+  <div class="main-container">
+    <!-- Side Panel -->
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-item active">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </div>
+      <div class="sidebar-item">
+        <i class="fas fa-compass"></i>
+        <span>Explore</span>
+      </div>
+      <div class="sidebar-item">
+        <i class="fas fa-play-circle"></i>
+        <span>Shorts</span>
+      </div>
+      <div class="sidebar-item">
+        <i class="fas fa-photo-video"></i>
+        <span>Subscriptions</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sidebar-item">
+        <i class="fas fa-book"></i>
+        <span>Library</span>
+      </div>
+      <div class="sidebar-item">
+        <i class="fas fa-history"></i>
+        <span>History</span>
+      </div>
+      <div class="sidebar-item">
+        <i class="fas fa-clock"></i>
+        <span>Watch later</span>
+      </div>
+      <div class="sidebar-item">
+        <i class="fas fa-thumbs-up"></i>
+        <span>Liked videos</span>
+      </div>
+
+      <div class="divider"></div>
+      <div class="sidebar-subtitle">Subscriptions</div>
+      <div class="small-sidebar-item">Marques Brownlee</div>
+      <div class="small-sidebar-item">Google</div>
+      <div class="small-sidebar-item">TechChannel</div>
+      <div class="small-sidebar-item">AI Insights</div>
+    </nav>
+
+    <!-- Main Content with video grid -->
+    <main class="content" id="contentArea">
+      <!-- Category pills just like YouTube -->
+      <div class="categories">
+        <span class="category-pill active">All</span>
+        <span class="category-pill">Talking Tech</span>
+        <span class="category-pill">Artificial Intelligence</span>
+        <span class="category-pill">Google</span>
+        <span class="category-pill">Sundar Pichai</span>
+        <span class="category-pill">Podcasts</span>
+        <span class="category-pill">Live</span>
+        <span class="category-pill">Recently uploaded</span>
+      </div>
+
+      <!-- Video grid populated dynamically with JS (but we also keep static structure) -->
+      <div class="video-grid" id="videoGrid"></div>
+    </main>
+  </div>
+
+  <script>
+    (function() {
+      // ── Video data to mimic real YouTube thumbnails and info ──
+      const videoData = [
+        { 
+          title: "Talking Tech and AI with Google CEO Sundar Pichai!",
+          channel: "Marques Brownlee",
+          views: "3.4M views",
+          time: "6 months ago",
+          duration: "15:24",
+          thumbnail: "hq720 (1).avif",
+          channelInitial: "M"
+        },
+        { 
+          title: "Google I/O 2025: Everything AI in under 10 minutes",
+          channel: "Google",
+          views: "2.1M views",
+          time: "3 weeks ago",
+          duration: "9:47",
+          thumbnail: "hq720 (1).avif",
+          channelInitial: "G"
+        },
+        { 
+          title: "The Future of Search: Google CEO on AI advancements",
+          channel: "TechVision",
+          views: "890K views",
+          time: "1 month ago",
+          duration: "22:05",
+          thumbnail: "hq720 (1).avif",
+          channelInitial: "T"
+        },
+        { 
+          title: "Sundar Pichai talks quantum computing & AI",
+          channel: "AI Insider",
+          views: "1.5M views",
+          time: "2 months ago",
+          duration: "18:32",
+          thumbnail: "hq720 (1).avif",
+          channelInitial: "A"
+        },
+        { 
+          title: "Marques Brownlee reviews Pixel 10 AI features",
+          channel: "Marques Brownlee",
+          views: "4.2M views",
+          time: "5 days ago",
+          duration: "12:18",
+          thumbnail: "hq720 (1).avif",
+          channelInitial: "M"
+        },
+        { 
+          title: "DeepMind: AI that teaches itself",
+          channel: "Google DeepMind",
+          views: "2.8M views",
+          time: "4 months ago",
+          duration: "14:10",
+          thumbnail: "hq720 (1).avif",
+          channelInitial: "D"
+        },
+        { 
+          title: "Talking Tech with Google CEO - Extended Interview",
+          channel: "Marques Brownlee",
+          views: "1.2M views",
+          time: "8 months ago",
+          duration: "45:59",
+          thumbnail: "hq720 (1).avif",
+          channelInitial: "M"
+        },
+        { 
+          title: "AI and the next generation of Google Assistant",
+          channel: "Google",
+          views: "3.1M views",
+          time: "1 year ago",
+          duration: "11:22",
+          thumbnail: "hq720 (1).avif",
+          channelInitial: "G"
+        },
+        { 
+          title: "How Google AI is changing smartphones forever",
+          channel: "TechChannel",
+          views: "950K views",
+          time: "2 weeks ago",
+          duration: "16:45",
+          thumbnail: "hq720 (1).avif",
+          channelInitial: "T"
+        },
+        { 
+          title: "Sundar Pichai on ethical AI development",
+          channel: "AI Ethics Today",
+          views: "670K views",
+          time: "5 months ago",
+          duration: "20:15",
+          thumbnail: "hq720 (1).avif",
+          channelInitial: "E"
+        },
+        { 
+          title: "Google CEO: Our plan for AI in education",
+          channel: "EdTech Weekly",
+          views: "540K views",
+          time: "3 months ago",
+          duration: "13:08",
+          thumbnail: "hq720 (1).avif",
+          channelInitial: "W"
+        },
+        { 
+          title: "Talking Tech and AI: Sundar Pichai full conversation",
+          channel: "Marques Brownlee",
+          views: "5.1M views",
+          time: "7 months ago",
+          duration: "32:40",
+          thumbnail: "hq720 (1).avif",
+          channelInitial: "M"
+        }
+      ];
+
+      const videoGrid = document.getElementById('videoGrid');
+
+      // Function to render video cards
+      function renderVideos() {
+        if (!videoGrid) return;
+        videoGrid.innerHTML = '';
+        videoData.forEach(video => {
+          const card = document.createElement('div');
+          card.className = 'video-card';
+          
+          // Using a placeholder gradient because actual image may not load; but we keep the src as requested.
+          // The thumbnail will show if the file exists, otherwise a dark placeholder.
+          card.innerHTML = `
+            <div class="thumbnail">
+              <img src="${video.thumbnail}" alt="${video.title}" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22169%22%3E%3Crect width=%22300%22 height=%22169%22 fill=%22%23222222%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23888%22 font-size=%2216%22%3EThumbnail%3C/text%3E%3C/svg%3E';">
+              <span class="duration">${video.duration}</span>
+            </div>
+            <div class="video-info">
+              <div class="channel-icon">${video.channelInitial}</div>
+              <div class="video-details">
+                <div class="video-title">${video.title}</div>
+                <div class="channel-name">
+                  ${video.channel} <i class="fas fa-check-circle" style="font-size: 12px; color: #aaa;"></i>
+                </div>
+                <div class="video-stats">${video.views} · ${video.time}</div>
+              </div>
+            </div>
+          `;
+          videoGrid.appendChild(card);
+        });
+      }
+
+      renderVideos();
+
+      // ── Interactive functionality ──
+
+      // Search button / enter key
+      const searchInput = document.getElementById('searchInput');
+      const searchButton = document.getElementById('searchButton');
+
+      function performSearch() {
+        const query = searchInput.value.trim();
+        if (query) {
+          alert(`Searching YouTube for: "${query}" (simulation)`);
+          // In real YouTube it would navigate. Here we just simulate.
+          searchInput.value = ''; 
+        } else {
+          alert('Please enter a search term.');
+        }
+      }
+
+      if (searchButton) {
+        searchButton.addEventListener('click', performSearch);
+      }
+      if (searchInput) {
+        searchInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            performSearch();
+          }
+        });
+      }
+
+      // Sidebar active state toggle (visual feedback)
+      const sidebarItems = document.querySelectorAll('.sidebar-item');
+      sidebarItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+          // Remove active from all sidebar items
+          sidebarItems.forEach(i => i.classList.remove('active'));
+          // Add active to clicked item
+          this.classList.add('active');
+          // Optional: show alert for demo
+          const text = this.innerText.trim() || 'section';
+          console.log(`Navigating to ${text} (demo)`);
+        });
+      });
+
+      // Category pills interaction
+      const pills = document.querySelectorAll('.category-pill');
+      pills.forEach(pill => {
+        pill.addEventListener('click', function() {
+          pills.forEach(p => p.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+
+      // Menu icon toggle (could collapse sidebar further, for demo we show alert)
+      document.getElementById('menuToggle').addEventListener('click', function() {
+        alert('Menu toggle: sidebar can be minimized (already responsive).');
+      });
+
+      // Mic button
+      document.querySelector('.mic-btn').addEventListener('click', () => {
+        alert('Voice search simulation.');
+      });
+
+      // Notification and create icons
+      document.querySelector('.fa-video')?.addEventListener('click', () => alert('Create video or post.'));
+      document.querySelector('.fa-bell')?.addEventListener('click', () => alert('Notifications panel.'));
+      
+      // Profile click
+      document.querySelector('.profile')?.addEventListener('click', () => alert('Your channel page.'));
+
+      // Video card click simulation
+      videoGrid.addEventListener('click', (e) => {
+        const card = e.target.closest('.video-card');
+        if (card) {
+          const title = card.querySelector('.video-title')?.innerText || 'video';
+          alert(`Playing: "${title}" (simulated video player)`);
+        }
+      });
+
+    })();
+  </script>
+</body>
+</html>
